@@ -13,12 +13,13 @@ struct RecordType
 struct HashType
 {
     struct RecordType* pRecord;
+    int dataSz;
 };
 
 // Compute the hash function
 int hash(int x)
 {
-    // Implement hash function
+    return x % 10;
 }
 
 // parses input file to an integer array
@@ -106,8 +107,23 @@ int main(void)
     }
 
     // Initialize the hash array
-    for (int i = 0; i < hashSz; ++i)
-    {
-        pHashArray[i].pRecord = NULL;
+    for (i = 0; i < 10; ++i) {
+        hashArray[i].pData = NULL;
+        hashArray[i].dataSz = 0;
     }
+
+     for (i = 0; i < recordSz; ++i)
+    {
+        hashIdx= hash(pRecords[i].id) % hashSz;
+        while (hashArray[hashIdx].record.id != 0)
+        {
+            hashIdx = (hashIdx + 1) % hashSz;
+        }
+        hashArray[hashIdx].record = pRecords[i];
+    }
+
+    displayRecordsInHash(hashArray, hashSz);
+
+    free(pRecords);
+    return 0;
 }
